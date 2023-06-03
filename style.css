@@ -5,7 +5,7 @@
   margin: 60px auto;
   border-radius: 30px;
   position: relative;
-  box-shadow: 0 0 3px rgb(109, 107, 107);
+  box-shadow: 0 0 15px rgb(109, 107, 107);
   overflow: hidden;
   padding: 10px 0 ;
 }
@@ -118,28 +118,24 @@
 
 .pageTwo {
   padding: 20px;
+  overflow-y: scroll;
 }
 
-.contactList {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
 
-.contactList li {
-  height: 40px;
-  margin-bottom: 10px;
-}
 
 .contactInfo {
   display: flex;
   align-items: center;
-  margin: 5px;
+  margin: 10px 0;
+  background-color: rgb(205, 255, 238);
+  padding: 10px;
+  border-radius: 10px;
+
 }
 
 .avatar-img {
-  height: 40px;
-  width: 40px;
+  height: 70px;
+  width: 70px;
   border-radius: 50%;
   margin-right: 10px;
 }
@@ -163,10 +159,19 @@
 }
 .pageTwo{
   display: none;
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
 .none{
   display: none;
 }
 .block{
   display: block;
+}
+#mobile{
+  position: absolute;
+  /* background-color: red; */
+  height: 50px;
+  width: 100px;
 }

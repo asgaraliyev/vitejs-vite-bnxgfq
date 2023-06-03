@@ -1,21 +1,42 @@
+const API_URL =
+  "https://3000-asgaraliyev-vitejsviteb-4uw4lvm9d3h.ws-us98.gitpod.io";
 function getRandomNumberBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+const usernameEl = document.querySelector("#username");
+async function getUser() {
+  const userId = localStorage.getItem("userId");
+  const req = await fetch(`${API_URL}/users?id=${userId}`);
+  const response = await req.json();
+  const user = response[0];
+  return user;
+}
+async function main() {
+  const user = await getUser();
+  if (!user) {
+    window.location.href = "/login";
+  } else {
+    window.user = user;
+  }
+  usernameEl.innerHTML = user.username;
+}
+main();
 const chatEl = document.querySelector("#chat");
-const chatFormEl=document.querySelector("#chat-form")
+const chatFormEl = document.querySelector("#chat-form");
 class MessageCtrl {
   constructor({
     createdAt = new Date(),
     updatedAt = new Date(),
     text = "",
     userObj,
-    isSender = false,
+  
   }) {
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.createdAt = new Date(createdAt.toString());
+    this.updatedAt = new Date(updatedAt.toString());
     this.text = text;
     this.userObj = userObj;
-    this.isSender = isSender;
+
+    this.isSender = user.id===this.userObj.id;
   }
   get PPURL() {
     const width = getRandomNumberBetween(300, 500);
@@ -41,12 +62,12 @@ class MessageCtrl {
     } else result = "Received";
     return result;
   }
-  get name(){
-    let result=""
-    if(this.isSender){
-      result="You"
-    }else result=this.userObj.name
-    return result
+  get name() {
+    let result = "";
+    if (this.isSender) {
+      result = "You";
+    } else result = this.userObj.username;
+    return result;
   }
   get render() {
     return /*html*/ `
@@ -69,103 +90,73 @@ class MessageCtrl {
         `;
   }
 }
-class UserCtrl{
-  constructor({name="",phone="",id=0}){
-    this.name=name
-    this.phone=phone
-    this.id=id
+class UserCtrl {
+  constructor({ username = "", phone = "", id = 0 }) {
+    this.username = username;
+    this.phone = phone;
+    this.id = id;
   }
 }
-const messages = [
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "How are you?",
-    userObj: new UserCtrl({ name: "John", phone: "123456789", id: 3 }),
-    isSender: false,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "I'm doing great!",
-    userObj: new UserCtrl({ name: "Sarah", phone: "987654321", id: 4 }),
-    isSender: true,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "What's your favorite movie?",
-    userObj: new UserCtrl({ name: "Michael", phone: "555555555", id: 5 }),
-    isSender: false,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "I love action movies!",
-    userObj: new UserCtrl({ name: "Emily", phone: "111111111", id: 6 }),
-    isSender: true,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "Do you have any plans for the weekend?",
-    userObj: new UserCtrl({ name: "Alex", phone: "222222222", id: 7 }),
-    isSender: false,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "Yes, I'm going hiking with friends.",
-    userObj: new UserCtrl({ name: "Jessica", phone: "333333333", id: 8 }),
-    isSender: true,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "What's your favorite book genre?",
-    userObj: new UserCtrl({ name: "David", phone: "444444444", id: 9 }),
-    isSender: false,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "I enjoy reading fantasy novels.",
-    userObj: new UserCtrl({ name: "Olivia", phone: "555555555", id: 10 }),
-    isSender: true,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "Are you excited about the upcoming concert?",
-    userObj: new UserCtrl({ name: "William", phone: "666666666", id: 11 }),
-    isSender: false,
-  }),
-  new MessageCtrl({
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    text: "Yes, I can't wait to see my favorite band live!",
-    userObj: new UserCtrl({ name: "Sophia", phone: "777777777", id: 12 }),
-    isSender: true,
-  })
- 
-];
-messages.map((message) => {
-  chatEl.innerHTML += message.render;
-});
-function addService({text}){
-  const req=fetch("https://3000-asgaraliyev-vitejsviteb-4uw4lvm9d3h.ws-us98.gitpod.io/messages",{
-    method:"POST",
-    body:JSON.stringify({
-      text
-    })
-  })
-
+async function getMessages() {
+  const req = await fetch(
+    "https://3000-asgaraliyev-vitejsviteb-4uw4lvm9d3h.ws-us98.gitpod.io/messages"
+  );
+  return await req.json();
 }
-chatFormEl.addEventListener("submit",(e)=>{
-  const formEl=e.target
-  e.preventDefault()
-  addService({
-    text:formEl.text.value.trim()
-  })
+async function getUserById(id) {
+  const req = await fetch(`${API_URL}/users?id=${id}`);
+  const response = await req.json();
+  const user = response[0];
+  return user;
+}
+
+async function renderMessages() {
+  chatEl.innerHTML=""
+  let messages = await getMessages();
   
-})
+  let newMessages = [];
+  for (let index = 0; index < messages.length; index++) {
+    const message = messages[index];
+    const user = await getUserById(message.userId);
+    const newMessage=new MessageCtrl({ ...message, userObj: new UserCtrl(user) })
+    newMessages.push(newMessage);
+  }
+
+  newMessages.sort((b,a)=>{
+    console.log("a",a)
+    return a.createdAt.getTime()>b.createdAt.getTime()
+  }).map((message) => {
+    renderNewMessage(message)
+  });
+}
+renderMessages();
+function addMessage({ text }) {
+  const req = fetch(
+    "https://3000-asgaraliyev-vitejsviteb-4uw4lvm9d3h.ws-us98.gitpod.io/messages",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text,
+        userId: user.id,
+        createdAt: new Date().toString(),
+        updatedAt: new Date().toString(),
+      }),
+    }
+  );
+}
+function renderNewMessage(message){
+  message=new MessageCtrl(message)
+  chatEl.innerHTML += message.render;
+}
+chatFormEl.addEventListener("submit", async (e) => {
+  const formEl = e.target;
+  e.preventDefault();
+  const req=await addMessage({
+    text: formEl.text.value.trim(),
+  });
+  const newMessage=await req.json()
+  renderNewMessage(newMessage)
+});
