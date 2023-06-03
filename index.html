@@ -2,12 +2,98 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="message.css" />
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script defer src="main.js"></script>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/main.js"></script>
+   
+    <div class="mobileChat">
+      <div class="date">
+        <div class="clock"><script>document.write(moment(new Date()).format("hh:mm"))</script></div>
+        <div class="country">Azerbaijan</div>
+      </div>
+      <div class="name">
+        <div id="back"><i class="fa-solid fa-arrow-left-long"></i></div>
+        <div id="pageName">Messages</div>
+        <div class="iconsHead">
+          <i class="fa-regular fa-eye"></i>
+        </div>
+      </div>
+      <div class="pages">
+        <div class="pageOne" >
+        <div id="chat" class="chat">
+        
+        </div>
+        <form id="chat-form" class="input">
+          <input type="text" name="text" placeholder="Type your message">
+          <button><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+      <div class="pageTwo">
+        <ul class="contactList">
+          <li>
+            <div class="contactInfo">
+              <img src="https://media.vanityfair.com/photos/6319eab06009e759e6638e28/master/w_2560%2Cc_limit/1421315651" alt="Avatar" class="avatar-img">
+              <div class="contactDetails">
+                <h3>John Doe</h3>
+                <p>Son Mesaj: Lorem ipsum dolor sit amet.</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="contactInfo">
+              <img src="https://media.vanityfair.com/photos/6319eab06009e759e6638e28/master/w_2560%2Cc_limit/1421315651g" alt="Avatar" class="avatar-img">
+              <div class="contactDetails">
+                <h3>Jane Smith</h3>
+                <p>Son Mesaj: consectetur adipiscing elit.</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="contactInfo">
+              <img src="https://media.vanityfair.com/photos/6319eab06009e759e6638e28/master/w_2560%2Cc_limit/1421315651" alt="Avatar" class="avatar-img">
+              <div class="contactDetails">
+                <h3>Michael Johnson</h3>
+                <p>Son Mesaj: Sed do eiusmod tempor incididunt.</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      </div>
+  </div>
+  <script>
+const back = document.getElementById("back");
+const one = document.querySelector(".pageOne");
+const two = document.querySelector(".pageTwo");
+const name = document.getElementById("pageName");
+
+back.onclick = function() {
+  one.classList.toggle("none");
+  two.classList.toggle("block");
+  if (one.classList.contains("none")) {
+    name.innerHTML = "Contacts";
+  } else {
+    name.innerHTML = "Messages";
+  }
+  back.style.display = "none"
+};
+
+
+  </script>
   </body>
 </html>

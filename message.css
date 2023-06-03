@@ -1,0 +1,8 @@
+.message {
+  .content {
+    min-width: 40%;
+  }
+  .author{
+    color:#1e40af
+  }
+}
